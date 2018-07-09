@@ -5,6 +5,7 @@ require 'parallel'
 require './genre'
 
 $BASE_URL = 'http://orwell.ru/'
+convert = true
 
 genre_links = Nokogiri::HTML(open($BASE_URL + 'library/index_en/')).css('ol//li//a')
 
@@ -19,4 +20,7 @@ genre_links.each do |item|
   writings_all_str += genre.genre_text
 end
 File.open('writings_all.html', 'w') { |file| file.write(writings_all_str)}
-system "ebook-convert writings_all.html writings_all.mobi --authors \"George Orwell\" --title \"George Orwell's Writings\" --level1-toc //h:h1 --level2-toc //h:h2 --max-toc-links 512 --toc-threshold 256"
+
+if convert
+  system "ebook-convert writings_all.html writings_all.mobi --authors \"George Orwell\" --title \"George Orwell's Writings\" --level1-toc //h:h1 --level2-toc //h:h2 --max-toc-links 512 --toc-threshold 256"
+end
